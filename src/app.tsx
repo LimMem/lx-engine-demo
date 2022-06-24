@@ -22,56 +22,56 @@ initBasicConfig({
   setPageNavBar,
 });
 
-const login = {
-  success: async () => {
-    try {
-      const e = (await authLoginService()) as any;
-      const { loginInfo = {} } = e?.resultObject || {};
-      lcdpApi.setData('user', loginInfo || {});
-      history.push({
-        pathname: '/',
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  updateRoutes: async (routes: any[], next: (arg0: any[]) => void) => {
-    const dynamicRoutes = await queryDynamicRoutesService();
-    const targetRoutes = merge(routes, dynamicRoutes);
-    routes[0].routes = targetRoutes;
-    next(routes);
-  },
-};
+// const login = {
+//   success: async () => {
+//     try {
+//       const e = (await authLoginService()) as any;
+//       const { loginInfo = {} } = e?.resultObject || {};
+//       lcdpApi.setData('user', loginInfo || {});
+//       history.push({
+//         pathname: '/',
+//       });
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   },
+//   updateRoutes: async (routes: any[], next: (arg0: any[]) => void) => {
+//     const dynamicRoutes = await queryDynamicRoutesService();
+//     const targetRoutes = merge(routes, dynamicRoutes);
+//     routes[0].routes = targetRoutes;
+//     next(routes);
+//   },
+// };
 
-const auth = {
-  fail: () => {
-    // saveRedirctUrl(history?.location?.pathname, history?.location?.query);
-    if (history) {
-      history.push({
-        pathname: '/login',
-      });
-    }
-  },
-  success: (e: { resultObject: { loginInfo?: {} | undefined } }) => {
-    const { loginInfo = {} } = e?.resultObject;
-    lcdpApi.setData('user', loginInfo || {});
-  },
-};
+// const auth = {
+//   fail: () => {
+//     // saveRedirctUrl(history?.location?.pathname, history?.location?.query);
+//     if (history) {
+//       history.push({
+//         pathname: '/login',
+//       });
+//     }
+//   },
+//   success: (e: { resultObject: { loginInfo?: {} | undefined } }) => {
+//     const { loginInfo = {} } = e?.resultObject;
+//     lcdpApi.setData('user', loginInfo || {});
+//   },
+// };
 
-const page = {
-  onListener: (pageData: any) => {
-    const pageTitle = document.querySelector('.alita-layout-head .am-navbar-title');
-    if (pageTitle) {
-      pageTitle.innerHTML = pageData.pageName;
-    }
-  },
-};
+// const page = {
+//   onListener: (pageData: any) => {
+//     const pageTitle = document.querySelector('.alita-layout-head .am-navbar-title');
+//     if (pageTitle) {
+//       pageTitle.innerHTML = pageData.pageName;
+//     }
+//   },
+// };
 
-lcdpApi.handleMessage = {
-  login,
-  auth,
-  page,
-};
+// lcdpApi.handleMessage = {
+//   login,
+//   auth,
+//   page,
+// };
 
 const merge = (routes: any[], dynamicRoutes: any[]) => {
   let targetRoutes: any[] = [];
@@ -89,42 +89,42 @@ const merge = (routes: any[], dynamicRoutes: any[]) => {
 };
 
 let dRoutes: any[] = [];
-export function patchRoutes({ routes }: any) {
-  let targetRoutes = merge(routes, dRoutes);
-  const homePath = targetRoutes.find((item) => item.path === '/index');
-  // const hasHomePath = extraRoutes.filter(item => item.path === '/index');
-  if (homePath) {
-    targetRoutes = targetRoutes.map((item: any) => {
-      if (item.path === '/') {
-        return { ...homePath, path: item.path };
-      }
-      return item;
-    });
-  }
-  // eslint-disable-next-line no-param-reassign
-  routes[0].routes = targetRoutes;
-}
+// export function patchRoutes({ routes }: any) {
+//   let targetRoutes = merge(routes, dRoutes);
+//   const homePath = targetRoutes.find((item) => item.path === '/index');
+//   // const hasHomePath = extraRoutes.filter(item => item.path === '/index');
+//   if (homePath) {
+//     targetRoutes = targetRoutes.map((item: any) => {
+//       if (item.path === '/') {
+//         return { ...homePath, path: item.path };
+//       }
+//       return item;
+//     });
+//   }
+//   // eslint-disable-next-line no-param-reassign
+//   routes[0].routes = targetRoutes;
+// }
 
-export async function render(oldRender: () => void) {
-  try {
-    dRoutes = await renderBefore();
-    const pathname = history?.location?.pathname;
-    if (pathname) {
-      const findObject = dRoutes.find((e) => e.path === pathname);
-      if (!findObject) {
-        auth.fail();
-      }
-    } else {
-      auth.fail();
-    }
-    oldRender();
-  } catch (error) {
-    console.log(error);
-    oldRender();
-  }
-}
+// export async function render(oldRender: () => void) {
+//   try {
+//     dRoutes = await renderBefore();
+//     const pathname = history?.location?.pathname;
+//     if (pathname) {
+//       const findObject = dRoutes.find((e) => e.path === pathname);
+//       if (!findObject) {
+//         auth.fail();
+//       }
+//     } else {
+//       auth.fail();
+//     }
+//     oldRender();
+//   } catch (error) {
+//     console.log(error);
+//     oldRender();
+//   }
+// }
 
-export { getKeepAlive };
+// export { getKeepAlive };
 
 const titleList: TitleListItem[] = [
   {

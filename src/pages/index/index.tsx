@@ -2,18 +2,26 @@ import React, { useRef, useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { findPageInstById } from '@lingxiteam/engine-mobile/es/service/page';
 import { DynamicPage, lcdpApi } from '@lingxiteam/engine-mobile';
-import { Toast } from 'antd-mobile';
+import { Toast, Button } from 'antd-mobile';
 import VConsole from 'vconsole';
 
 interface HomePageProps {}
+
+export type validateFieldsAndShowErrorParams = (e: any) => void;
+
+export interface ForwardRefDynamicPage {
+  validateAllForms: () => Promise<any>;
+  validateFieldsAndShowError: (e: validateFieldsAndShowErrorParams) => void;
+  [key: string]: any;
+}
 
 const DPage = (props) => {
   const { query = {} } = props.location;
   const { defaultProps } = props.route;
   const [pageInst, setPageInst] = useState();
-  const { pageId } = defaultProps || {};
+  const { pageId = '845847207970054144' } = defaultProps || {};
   const debugRef = useRef<any>();
-
+  const dynamicRef = useRef<ForwardRefDynamicPage>();
   const requestPageInst = () => {
     // 请求一次当前页面的具体数据
     if (pageId) {
@@ -33,9 +41,10 @@ const DPage = (props) => {
     }
   };
 
-  useEffect(requestPageInst, [props.pageId]);
+  // useEffect(requestPageInst, [props.pageId]);
 
   useEffect(() => {
+    window.appId = '772790966277644288';
     const setPageNavBar = lcdpApi.getRefs('setPageNavBar');
     if (setPageNavBar) {
       setPageNavBar({
@@ -45,6 +54,7 @@ const DPage = (props) => {
         },
       });
     }
+    requestPageInst();
     return () => {
       if (debugRef.current) {
         debugRef.current.destroy();
@@ -56,15 +66,25 @@ const DPage = (props) => {
     <>
       <DynamicPage
         {...props}
+        ref={dynamicRef}
         pageInst={pageInst}
         pageId={pageId || query.pageId}
-        appId={(window as any).appId || ''}
+        appId={772790966277644288}
         pageDidLoad={(obj) => {
           if (obj.debug) {
             debugRef.current = new VConsole();
           }
         }}
       />
+      <Button
+        onClick={() => {
+          dynamicRef.current?.validateFieldsAndShowError?.((a) => {
+            console.log(a);
+          });
+        }}
+      >
+        获取表单值
+      </Button>
     </>
   );
 };
