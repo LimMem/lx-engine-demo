@@ -22,7 +22,7 @@
   "dependencies": {
     "@alitajs/antd-mobile-plus": "^0.8.13",
     "@alitajs/dform": "3.1.16",
-    "@lingxiteam/engine-mobile": "0.6.10-alpha.1",
+    "@lingxiteam/engine-mobile": "0.6.10-alpha.3",
     "alita": "2.8.33-beta.0"
   },
   "gitHooks": {
